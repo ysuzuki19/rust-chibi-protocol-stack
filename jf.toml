@@ -1,0 +1,33 @@
+[meta]
+version = "0.1.0"
+
+[job.test]
+command = "cargo"
+args = ["test"]
+
+[job.build]
+command = "cargo"
+args = ["build"]
+
+[job.ci]
+mode = "sequential"
+jobs = ["test", "build"]
+
+[job."test:live"]
+mode = "watch"
+job = "test"
+watch_list = ["src/**/*"]
+
+[job.sudo-debug-run]
+visibility = "private"
+command = "sudo"
+args = ["target/debug/rust-chibi-protocol-stack"]
+
+[job.run]
+mode = "sequential"
+jobs = ["build", "sudo-debug-run"]
+
+[job."run:live"]
+mode = "watch"
+job = "run"
+watch_list = ["src/**/*"]
